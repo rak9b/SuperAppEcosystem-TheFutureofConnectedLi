@@ -1,49 +1,29 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, Zap, Shield, Globe, ChevronRight, Play, Briefcase, Server, PenTool, Truck, Headphones, Code } from 'lucide-react';
+import { ArrowRight, Smartphone, Cpu, ShoppingBag, Shield, Globe, Code, Zap, CheckCircle2, Play } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Button } from '../components/ui/Button';
-import { ProductCard } from '../components/product/ProductCard';
-import { useStore } from '../store/useStore';
-import { useAIStore } from '../store/useAIStore';
-import { HologramSupport } from '../components/ai/HologramSupport';
+import { ServiceHeader } from '../components/layout/ServiceHeader';
 
 export function Home() {
-  const { products } = useStore();
-  const { showHologram, toggleHologram } = useAIStore();
   const { scrollY } = useScroll();
-  
   const heroY = useTransform(scrollY, [0, 500], [0, 200]);
   const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
 
-  const featuredProducts = products.slice(0, 4);
-
-  const businessServices = [
-    { icon: Briefcase, title: "Product Sourcing", desc: "Connect with global suppliers." },
-    { icon: Code, title: "Web Development", desc: "Custom storefront solutions." },
-    { icon: Server, title: "Hosting & Domain", desc: "Reliable cloud infrastructure." },
-    { icon: PenTool, title: "Digital Marketing", desc: "SEO, SEM & Social Media." },
-    { icon: Truck, title: "Logistics Solutions", desc: "End-to-end shipping mgmt." },
-    { icon: Headphones, title: "Customer Support", desc: "24/7 Managed AI agents." },
-  ];
-
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#050505] overflow-x-hidden">
-      {showHologram && <HologramSupport onClose={toggleHologram} />}
-
-      {/* ---------------- HERO SECTION ---------------- */}
+      {/* 1. HERO SECTION */}
       <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
         {/* Background Effects */}
         <div className="absolute inset-0 z-0">
           <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[120px] animate-blob" />
           <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[120px] animate-blob animation-delay-2000" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/5 rounded-full blur-[100px] mix-blend-overlay" />
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150"></div>
         </div>
 
         <div className="container mx-auto px-4 relative z-10 text-center">
           <motion.div 
             style={{ y: heroY, opacity: heroOpacity }}
-            className="max-w-4xl mx-auto"
+            className="max-w-5xl mx-auto"
           >
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -52,10 +32,10 @@ export function Home() {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 dark:bg-white/5 border border-white/20 backdrop-blur-md mb-8"
             >
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
               </span>
-              <span className="text-sm font-medium text-slate-600 dark:text-slate-300">SuperApp Ecosystem v2.0 is live</span>
+              <span className="text-sm font-medium text-slate-600 dark:text-slate-300">The Future of Fintech & AI is Here</span>
             </motion.div>
 
             <motion.h1 
@@ -64,17 +44,17 @@ export function Home() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-6xl md:text-8xl font-display font-bold tracking-tighter mb-6 dark:text-white leading-[1.1]"
             >
-              One App.<br />
-              <span className="text-gradient">Infinite Possibilities.</span>
+              Finance. AI. <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600">Everything Connected.</span>
             </motion.h1>
 
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed"
+              className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-10 max-w-3xl mx-auto leading-relaxed"
             >
-              Experience the future of connected living. Shop, Ride, Eat, and Pay with the world's first AI-powered ecosystem.
+              Manage your money, automate your life with AI, and access a world of services in one unified ecosystem.
             </motion.p>
 
             <motion.div 
@@ -83,150 +63,152 @@ export function Home() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="flex flex-col sm:flex-row items-center justify-center gap-4"
             >
-              <Button variant="glow" size="xl" className="w-full sm:w-auto group">
-                Get Started <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-              <Button variant="outline" size="xl" className="w-full sm:w-auto group" onClick={toggleHologram}>
-                <Play className="mr-2 w-5 h-5 fill-current" /> Watch Demo
-              </Button>
+              <Link to="/pay">
+                <Button variant="glow" size="xl" className="w-full sm:w-auto min-w-[200px]">
+                  Open Wallet <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </Link>
+              <Link to="/ai-hub">
+                <Button variant="outline" size="xl" className="w-full sm:w-auto min-w-[200px]">
+                  Explore AI Tools
+                </Button>
+              </Link>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* ---------------- FLASH DEALS BANNER ---------------- */}
-      <section className="py-8 bg-gradient-to-r from-red-600 to-pink-600 text-white">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
-          <div className="flex items-center gap-4 mb-4 md:mb-0">
-            <div className="bg-white/20 p-3 rounded-full animate-pulse">
-              <Zap className="h-6 w-6" />
-            </div>
-            <div>
-              <h3 className="text-2xl font-bold">Flash Sale is Live!</h3>
-              <p className="text-red-100">Up to 70% off on Electronics & Fashion. Ends in 02:45:10</p>
-            </div>
-          </div>
-          <div className="flex gap-4">
-             <div className="bg-white/10 px-4 py-2 rounded-lg border border-white/20">
-               <span className="text-xs text-red-200 block">Coupon Code</span>
-               <span className="font-mono font-bold text-lg">SUPER20</span>
-             </div>
-             <Link to="/flash-sale">
-               <Button variant="secondary" className="h-full">Shop Now</Button>
-             </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------- BUSINESS SERVICES (B2B) ---------------- */}
-      <section className="py-20 bg-white dark:bg-[#0A0A0A]">
+      {/* 2. SERVICES OVERVIEW */}
+      <section className="py-24 bg-white dark:bg-[#0A0A0A] relative z-10">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-display font-bold dark:text-white mb-2">Business Solutions</h2>
-            <p className="text-slate-500">Comprehensive services for merchants and enterprises.</p>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-display font-bold dark:text-white mb-4">One Platform. Three Pillars.</h2>
+            <p className="text-slate-500 text-lg">Designed to empower individuals and businesses.</p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {businessServices.map((svc, i) => (
-              <div key={i} className="p-4 rounded-xl border border-slate-100 dark:border-white/10 hover:shadow-lg transition-all bg-slate-50 dark:bg-white/5 text-center group cursor-pointer">
-                <div className="w-10 h-10 mx-auto bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-blue-600 mb-3 group-hover:scale-110 transition-transform">
-                  <svc.icon className="h-5 w-5" />
-                </div>
-                <h3 className="font-bold text-sm dark:text-white mb-1">{svc.title}</h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">{svc.desc}</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* MFS Card */}
+            <Link to="/pay" className="group p-8 rounded-3xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:border-blue-500/50 transition-all hover:shadow-2xl hover:shadow-blue-500/10">
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center text-blue-600 mb-6 group-hover:scale-110 transition-transform">
+                <Smartphone className="w-8 h-8" />
               </div>
-            ))}
+              <h3 className="text-2xl font-bold dark:text-white mb-3">Mobile Finance</h3>
+              <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                Send money, pay bills, and manage savings with bank-grade security. The complete digital wallet experience.
+              </p>
+              <ul className="space-y-2 mb-6">
+                {['Instant Transfers', 'QR Payments', 'Govt. Fees'].map(item => (
+                  <li key={item} className="flex items-center text-sm text-slate-500 dark:text-slate-400">
+                    <CheckCircle2 className="w-4 h-4 text-blue-500 mr-2" /> {item}
+                  </li>
+                ))}
+              </ul>
+              <div className="text-blue-600 font-bold flex items-center">Go to Wallet <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" /></div>
+            </Link>
+
+            {/* AI Card */}
+            <Link to="/ai-hub" className="group p-8 rounded-3xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:border-purple-500/50 transition-all hover:shadow-2xl hover:shadow-purple-500/10">
+              <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center text-purple-600 mb-6 group-hover:scale-110 transition-transform">
+                <Cpu className="w-8 h-8" />
+              </div>
+              <h3 className="text-2xl font-bold dark:text-white mb-3">AI Intelligence</h3>
+              <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                Access state-of-the-art AI models for imaging, text, and automation. Build workflows that work for you.
+              </p>
+              <ul className="space-y-2 mb-6">
+                {['Generative AI', 'Voice Cloning', 'Data Analytics'].map(item => (
+                  <li key={item} className="flex items-center text-sm text-slate-500 dark:text-slate-400">
+                    <CheckCircle2 className="w-4 h-4 text-purple-500 mr-2" /> {item}
+                  </li>
+                ))}
+              </ul>
+              <div className="text-purple-600 font-bold flex items-center">Open AI Hub <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" /></div>
+            </Link>
+
+            {/* Commerce Card */}
+            <Link to="/products" className="group p-8 rounded-3xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:border-pink-500/50 transition-all hover:shadow-2xl hover:shadow-pink-500/10">
+              <div className="w-16 h-16 bg-pink-100 dark:bg-pink-900/30 rounded-2xl flex items-center justify-center text-pink-600 mb-6 group-hover:scale-110 transition-transform">
+                <ShoppingBag className="w-8 h-8" />
+              </div>
+              <h3 className="text-2xl font-bold dark:text-white mb-3">Global Commerce</h3>
+              <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                Shop millions of products or order food and rides. One account for all your daily needs.
+              </p>
+              <ul className="space-y-2 mb-6">
+                {['Marketplace', 'Food Delivery', 'Ride Sharing'].map(item => (
+                  <li key={item} className="flex items-center text-sm text-slate-500 dark:text-slate-400">
+                    <CheckCircle2 className="w-4 h-4 text-pink-500 mr-2" /> {item}
+                  </li>
+                ))}
+              </ul>
+              <div className="text-pink-600 font-bold flex items-center">Start Shopping <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" /></div>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* ---------------- BENTO GRID SERVICES ---------------- */}
-      <section className="py-20 container mx-auto px-4">
-        <div className="mb-16 text-center">
-          <h2 className="text-4xl font-display font-bold dark:text-white mb-4">Everything you need. <span className="text-slate-500">Nothing you don't.</span></h2>
-          <p className="text-slate-500 max-w-2xl mx-auto">Our ecosystem integrates every aspect of your daily life into one seamless, beautiful interface.</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto md:h-[600px]">
-          {/* Large Card - Shop */}
-          <Link to="/products" className="md:col-span-2 md:row-span-2 group relative rounded-3xl overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1000&q=80" className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" alt="" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-8 flex flex-col justify-end">
-              <h3 className="text-3xl font-bold text-white mb-2">Global Marketplace</h3>
-              <p className="text-slate-300 mb-6 max-w-md">Access millions of products with AI-powered recommendations and same-day drone delivery.</p>
-              <div className="flex items-center text-white font-medium">Explore Shop <ChevronRight className="w-4 h-4 ml-1" /></div>
+      {/* 3. DEVELOPER & API SECTION */}
+      <section className="py-24 bg-slate-900 dark:bg-black text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="flex flex-col md:flex-row items-center gap-16">
+            <div className="flex-1">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold mb-6">
+                <Code className="w-4 h-4" /> For Developers
+              </div>
+              <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">Build on our Infrastructure</h2>
+              <p className="text-slate-400 text-lg mb-8 leading-relaxed">
+                Integrate our Payment Gateway, AI Models, and Logistics network directly into your applications. 
+                Robust APIs, webhooks, and SDKs ready for scale.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link to="/developer">
+                  <Button className="bg-white text-black hover:bg-gray-200 border-none">
+                    Read Documentation
+                  </Button>
+                </Link>
+                <Button variant="outline" className="text-white border-white/20 hover:bg-white/10">
+                  Get API Key
+                </Button>
+              </div>
             </div>
-          </Link>
-
-          {/* Medium Card - Ride */}
-          <Link to="/ride" className="group relative rounded-3xl overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
-            <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=800&q=80" className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" alt="" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-8 flex flex-col justify-end">
-              <h3 className="text-2xl font-bold text-white mb-1">Smart Mobility</h3>
-              <p className="text-slate-300 text-sm">Autonomous & Human-driven rides.</p>
+            <div className="flex-1 w-full">
+              <div className="bg-[#1E1E1E] rounded-2xl p-6 shadow-2xl border border-white/10 font-mono text-sm overflow-hidden">
+                <div className="flex gap-2 mb-4">
+                  <div className="w-3 h-3 rounded-full bg-red-500" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                  <div className="w-3 h-3 rounded-full bg-green-500" />
+                </div>
+                <div className="space-y-2">
+                  <p className="text-purple-400">const <span className="text-blue-400">superApp</span> = <span className="text-yellow-400">require</span>('superapp-sdk');</p>
+                  <p className="text-gray-500">// Initialize Payment</p>
+                  <p className="text-purple-400">await <span className="text-blue-400">superApp</span>.pay.<span className="text-yellow-400">create</span>({`{`}</p>
+                  <p className="pl-4 text-green-400">amount: <span className="text-orange-400">500</span>,</p>
+                  <p className="pl-4 text-green-400">currency: <span className="text-orange-400">'USD'</span>,</p>
+                  <p className="pl-4 text-green-400">callback: <span className="text-orange-400">'https://api.you.com/webhook'</span></p>
+                  <p className="text-purple-400">`{'}'});</p>
+                  <p className="text-gray-500 mt-4">// Generate AI Image</p>
+                  <p className="text-purple-400">const <span className="text-blue-400">image</span> = await <span className="text-blue-400">superApp</span>.ai.<span className="text-yellow-400">generate</span>({`{`}</p>
+                  <p className="pl-4 text-green-400">prompt: <span className="text-orange-400">'Futuristic city with flying cars'</span></p>
+                  <p className="text-purple-400">`{'}'});</p>
+                </div>
+              </div>
             </div>
-          </Link>
-
-          {/* Medium Card - Food */}
-          <Link to="/food" className="group relative rounded-3xl overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
-            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80" className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" alt="" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-8 flex flex-col justify-end">
-              <h3 className="text-2xl font-bold text-white mb-1">Cravings, Solved.</h3>
-              <p className="text-slate-300 text-sm">Food delivery in minutes.</p>
-            </div>
-          </Link>
-        </div>
-      </section>
-
-      {/* ---------------- FEATURED PRODUCTS ---------------- */}
-      <section className="py-20 bg-white dark:bg-[#0A0A0A] border-y border-slate-200 dark:border-white/5">
-        <div className="container mx-auto px-4">
-          <div className="flex items-end justify-between mb-12">
-            <div>
-              <h2 className="text-3xl font-display font-bold dark:text-white mb-2">Trending Now</h2>
-              <p className="text-slate-500">Curated specifically for your taste.</p>
-            </div>
-            <Link to="/products" className="text-blue-600 font-medium hover:underline">View Collection</Link>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {featuredProducts.map((product, i) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-              >
-                <ProductCard product={product} />
-              </motion.div>
-            ))}
           </div>
         </div>
       </section>
 
-      {/* ---------------- AFFILIATE & B2B CTA ---------------- */}
-      <section className="py-20 container mx-auto px-4">
-         <div className="bg-slate-900 dark:bg-white/5 rounded-3xl p-12 flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="text-white max-w-xl">
-               <h2 className="text-3xl font-bold mb-4">Become a Partner</h2>
-               <p className="text-slate-300 mb-6">Join our Affiliate Program or start selling as a Vendor. Access bulk pricing, wholesale tools, and global reach.</p>
-               <div className="flex gap-4">
-                 <Link to="/affiliate"><Button variant="primary" className="bg-white text-black hover:bg-gray-200">Affiliate Program</Button></Link>
-                 <Link to="/vendor/dashboard"><Button variant="outline" className="text-white border-white hover:bg-white/10">Vendor Login</Button></Link>
-               </div>
-            </div>
-            <div className="flex gap-6">
-               <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-400">15%</div>
-                  <div className="text-sm text-slate-400">Commission</div>
-               </div>
-               <div className="text-center">
-                  <div className="text-3xl font-bold text-green-400">50k+</div>
-                  <div className="text-sm text-slate-400">Partners</div>
-               </div>
-            </div>
-         </div>
+      {/* 4. TRUST & PARTNERS */}
+      <section className="py-20 border-t border-slate-200 dark:border-white/10">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-slate-500 font-bold uppercase tracking-widest mb-8 text-sm">Trusted by Industry Leaders</p>
+          <div className="flex flex-wrap justify-center gap-12 opacity-50 grayscale">
+             {/* Mock Logos */}
+             {['Acme Corp', 'Global Bank', 'TechFlow', 'Nebula AI', 'LogiStick'].map((name, i) => (
+               <div key={i} className="text-2xl font-bold font-display">{name}</div>
+             ))}
+          </div>
+        </div>
       </section>
     </div>
   );

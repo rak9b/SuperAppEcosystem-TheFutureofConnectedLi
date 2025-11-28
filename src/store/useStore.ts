@@ -24,6 +24,9 @@ interface AppState {
   setCurrency: (currency: 'USD' | 'EUR' | 'GBP' | 'BDT') => void;
   language: 'en' | 'es' | 'fr';
   setLanguage: (lang: 'en' | 'es' | 'fr') => void;
+  tourCompleted: boolean;
+  completeTour: () => void;
+  resetTour: () => void;
 
   addresses: Address[];
   addAddress: (address: Address) => void;
@@ -32,6 +35,9 @@ interface AppState {
   wishlist: string[]; // Product IDs
   toggleWishlist: (productId: string) => void;
   
+  followedVendors: string[]; // Vendor IDs
+  toggleFollowVendor: (vendorId: string) => void;
+
   membershipTier: 'Silver' | 'Gold' | 'Platinum';
   loyaltyPoints: number;
   addPoints: (points: number) => void;
@@ -55,6 +61,7 @@ interface AppState {
 
   // Data (Mocked Database)
   products: Product[];
+  addProduct: (product: Product) => void; // For Vendor
   vendors: Vendor[];
 }
 
@@ -73,6 +80,10 @@ export const useStore = create<AppState>()(
       setCurrency: (currency) => set({ currency }),
       language: 'en',
       setLanguage: (language) => set({ language }),
+      
+      tourCompleted: false,
+      completeTour: () => set({ tourCompleted: true }),
+      resetTour: () => set({ tourCompleted: false }),
 
       addresses: [
         { id: 'a1', label: 'Home', details: '123 Innovation Blvd, Tech City', isDefault: true },
@@ -87,6 +98,13 @@ export const useStore = create<AppState>()(
           : [...state.wishlist, id]
       })),
 
+      followedVendors: [],
+      toggleFollowVendor: (id) => set((state) => ({
+        followedVendors: state.followedVendors.includes(id)
+          ? state.followedVendors.filter(i => i !== id)
+          : [...state.followedVendors, id]
+      })),
+
       membershipTier: 'Gold',
       loyaltyPoints: 2450,
       addPoints: (points) => set((state) => ({ loyaltyPoints: state.loyaltyPoints + points })),
@@ -94,9 +112,11 @@ export const useStore = create<AppState>()(
       cart: [],
       addToCart: (product, quantity = 1) => {
         const { cart } = get();
+        // Check Single Vendor Rule
         if (cart.length > 0 && cart[0].vendorId !== product.vendorId) {
           return { success: false, error: 'VENDOR_CONFLICT' };
         }
+        
         const existingItem = cart.find((item) => item.id === product.id);
         if (existingItem) {
           set({
@@ -147,6 +167,7 @@ export const useStore = create<AppState>()(
       },
 
       products: PRODUCTS,
+      addProduct: (product) => set((state) => ({ products: [product, ...state.products] })),
       vendors: VENDORS,
     }),
     {
@@ -157,10 +178,14 @@ export const useStore = create<AppState>()(
         isAuthenticated: state.isAuthenticated,
         isDarkMode: state.isDarkMode,
         wishlist: state.wishlist,
+        followedVendors: state.followedVendors,
+        recentProducts: state.recentProducts,
         loyaltyPoints: state.loyaltyPoints,
         addresses: state.addresses,
         currency: state.currency,
-        language: state.language
+        language: state.language,
+        tourCompleted: state.tourCompleted,
+        products: state.products 
       }),
     }
   )

@@ -1,4 +1,4 @@
-export type Role = 'admin' | 'vendor' | 'user';
+export type Role = 'admin' | 'vendor' | 'user' | 'driver' | 'agent';
 
 export interface User {
   id: string;
@@ -6,6 +6,7 @@ export interface User {
   email: string;
   role: Role;
   avatar?: string;
+  phone?: string;
 }
 
 export interface Vendor extends User {
