@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Star, ShoppingCart, Heart, ArrowLeft, Minus, Plus, Sparkles, Camera, RefreshCw, Box, Package, Truck, ShieldCheck, Info, Factory } from 'lucide-react';
+import { Star, ShoppingCart, Heart, ArrowLeft, Minus, Plus, Sparkles, Camera, RefreshCw, Box, Package, Truck, ShieldCheck, Info, Factory, FileText } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { Button } from '../components/ui/Button';
 import { formatPrice } from '../lib/utils';
 import { ProductCard } from '../components/product/ProductCard';
+import { AIReviewSummary } from '../components/shop/AIReviewSummary';
+import { RFQModal } from '../components/shop/RFQModal';
+import { TradeAssuranceBadge } from '../components/shop/TradeAssuranceBadge';
 
 export function ProductDetails() {
   const { id } = useParams();
@@ -12,6 +15,7 @@ export function ProductDetails() {
   const [quantity, setQuantity] = useState(1);
   const [showConflictModal, setShowConflictModal] = useState(false);
   const [showTryOn, setShowTryOn] = useState(false);
+  const [showRFQ, setShowRFQ] = useState(false);
   const [isSubscription, setIsSubscription] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState('Default');
   const [activeTab, setActiveTab] = useState<'specs' | 'reviews' | 'supplier'>('specs');
@@ -72,11 +76,13 @@ export function ProductDetails() {
 
         {/* Info */}
         <div>
-          <div className="mb-2">
+          <div className="mb-2 flex justify-between items-start">
             <Link to={`/shop/${product.vendorId}`} className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded">
               {product.vendorName}
             </Link>
+            <TradeAssuranceBadge />
           </div>
+          
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">{product.name}</h1>
           
           <div className="flex items-center space-x-4 mb-6">
@@ -115,26 +121,8 @@ export function ProductDetails() {
             </div>
           </div>
 
-          {/* Subscription Option */}
-          <div 
-            className={`p-4 rounded-xl border mb-6 cursor-pointer transition-all ${isSubscription ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-700'}`}
-            onClick={() => setIsSubscription(!isSubscription)}
-          >
-             <div className="flex items-center justify-between">
-               <div className="flex items-center gap-3">
-                 <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${isSubscription ? 'border-blue-600 bg-blue-600' : 'border-gray-400'}`}>
-                   {isSubscription && <div className="w-2 h-2 bg-white rounded-full" />}
-                 </div>
-                 <div>
-                   <p className="font-bold text-sm dark:text-white flex items-center"><RefreshCw className="h-3 w-3 mr-1" /> Subscribe & Save 10%</p>
-                   <p className="text-xs text-gray-500 dark:text-gray-400">Auto-delivery every month.</p>
-                 </div>
-               </div>
-             </div>
-          </div>
-
           {/* Actions */}
-          <div className="flex items-center space-x-4 mb-8 border-t dark:border-gray-700 py-6">
+          <div className="flex items-center space-x-4 mb-6 border-t dark:border-gray-700 py-6">
             <div className="flex items-center border dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800">
               <button 
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -161,9 +149,14 @@ export function ProductDetails() {
             </button>
           </div>
           
-          {/* Bulk Pricing Table */}
-          <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl mb-6">
-             <h4 className="font-bold text-sm mb-2 flex items-center"><Package className="h-4 w-4 mr-2" /> Bulk Pricing (B2B)</h4>
+          {/* B2B Section */}
+          <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl mb-6 border border-slate-200 dark:border-slate-700">
+             <div className="flex justify-between items-center mb-3">
+                <h4 className="font-bold text-sm flex items-center"><Package className="h-4 w-4 mr-2" /> Bulk Pricing (B2B)</h4>
+                <button onClick={() => setShowRFQ(true)} className="text-xs font-bold text-blue-600 hover:underline flex items-center">
+                   <FileText className="h-3 w-3 mr-1" /> Request Quote
+                </button>
+             </div>
              <div className="grid grid-cols-3 gap-2 text-xs">
                 <div className="p-2 bg-white dark:bg-slate-800 rounded border dark:border-slate-700 text-center">
                    <div className="font-bold">1-9</div>
@@ -241,9 +234,13 @@ export function ProductDetails() {
          )}
          
          {activeTab === 'reviews' && (
-            <div className="text-center py-10 text-gray-500">
-               <Star className="h-12 w-12 mx-auto mb-2 text-gray-300" />
-               <p>Reviews coming soon...</p>
+            <div className="space-y-8">
+               {/* AI Summary Component */}
+               <AIReviewSummary rating={product.rating} reviewCount={product.reviewsCount} />
+               
+               <div className="text-center py-10 text-gray-500 border-t dark:border-gray-700">
+                  <p>Individual reviews list would appear here...</p>
+               </div>
             </div>
          )}
       </div>
@@ -258,7 +255,7 @@ export function ProductDetails() {
          </div>
       </div>
 
-      {/* Conflict Modal */}
+      {/* Modals */}
       {showConflictModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full shadow-2xl transform scale-100 transition-all">
@@ -273,6 +270,8 @@ export function ProductDetails() {
           </div>
         </div>
       )}
+
+      {showRFQ && <RFQModal productName={product.name} onClose={() => setShowRFQ(false)} />}
 
       {/* Virtual Try-On Modal */}
       {showTryOn && (

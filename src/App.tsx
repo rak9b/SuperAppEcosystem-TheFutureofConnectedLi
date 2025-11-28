@@ -11,6 +11,7 @@ import { AIVoiceAssistant } from './components/ai/AIVoiceAssistant';
 import { useEffect, useState } from 'react';
 import { Facebook, Smartphone, Fingerprint } from 'lucide-react';
 import { CookieConsent } from './components/ui/CookieConsent';
+import { ToastContainer } from './components/ui/Toast';
 
 // New SuperApp Pages
 import { Ride } from './pages/Ride';
@@ -20,7 +21,15 @@ import { Safety } from './pages/Safety';
 import { Checkout } from './pages/Checkout';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { VendorDashboard } from './pages/VendorDashboard';
+import { DriverDashboard } from './pages/DriverDashboard';
 import { Profile } from './pages/Profile';
+import { Developer } from './pages/Developer';
+import { Parcel } from './pages/Parcel';
+
+// Shop Pages
+import { Marketplace } from './pages/Marketplace';
+import { VendorShop } from './pages/VendorShop';
+import { RecentProducts } from './pages/RecentProducts';
 
 // AI Showcase Pages
 import { AIHub } from './pages/AIHub';
@@ -42,13 +51,14 @@ const Login = () => {
   const [step, setStep] = useState<'method' | 'otp' | 'biometric'>('method');
   const [loading, setLoading] = useState(false);
   
-  const handleLogin = (role: 'user' | 'vendor' | 'admin') => {
+  const handleLogin = (role: 'user' | 'vendor' | 'admin' | 'driver') => {
     setLoading(true);
     setTimeout(() => {
       if (role === 'user') login({ id: 'u1', name: 'John User', email: 'user@example.com', role: 'user' });
       if (role === 'vendor') login({ id: 'v1', name: 'Tech Vendor', email: 'vendor@example.com', role: 'vendor', shopName: 'Tech Haven' } as any);
       if (role === 'admin') login({ id: 'a1', name: 'Super Admin', email: 'admin@example.com', role: 'admin' });
-      navigate('/');
+      if (role === 'driver') login({ id: 'd1', name: 'Driver Dave', email: 'driver@example.com', role: 'driver' } as any);
+      navigate(role === 'driver' ? '/driver/dashboard' : '/');
     }, 1000);
   };
 
@@ -104,6 +114,7 @@ const Login = () => {
 
             <div className="text-xs text-slate-400 mt-6 flex justify-center gap-4">
               <span className="cursor-pointer hover:text-blue-500 transition-colors" onClick={() => handleLogin('vendor')}>Vendor Login</span>
+              <span className="cursor-pointer hover:text-blue-500 transition-colors" onClick={() => handleLogin('driver')}>Driver Login</span>
               <span className="cursor-pointer hover:text-blue-500 transition-colors" onClick={() => handleLogin('admin')}>Admin Login</span>
             </div>
           </div>
@@ -153,7 +164,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const { isDarkMode } = useStore();
   
-  const isImmersivePage = ['/ride', '/food', '/pay', '/safety', '/checkout', '/admin', '/vendor', '/login', '/ai-hub', '/ai-modules'].some(path => location.pathname.startsWith(path));
+  const isImmersivePage = ['/ride', '/food', '/pay', '/safety', '/checkout', '/admin', '/vendor', '/driver', '/login', '/ai-hub', '/ai-modules', '/market', '/parcel'].some(path => location.pathname.startsWith(path));
 
   useEffect(() => {
     if (isDarkMode) {
@@ -173,6 +184,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <AIChatbot />
       <AIVoiceAssistant />
       <CookieConsent />
+      <ToastContainer />
     </div>
   );
 };
@@ -182,8 +194,10 @@ function App() {
     <Router>
       <Layout>
         <Routes>
-          {/* Shop Vertical (Default) */}
+          {/* Landing & Shop */}
           <Route path="/" element={<Home />} />
+          <Route path="/market" element={<Marketplace />} />
+          <Route path="/products" element={<Listing title="All Products" />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/compare" element={<Comparison />} />
@@ -197,11 +211,13 @@ function App() {
           <Route path="/features" element={<Features />} />
           <Route path="/support" element={<Support />} />
           <Route path="/affiliate" element={<Affiliate />} />
+          <Route path="/developer" element={<Developer />} />
           
           {/* SuperApp Verticals */}
           <Route path="/ride" element={<Ride />} />
           <Route path="/food" element={<Food />} />
           <Route path="/pay" element={<Pay />} />
+          <Route path="/parcel" element={<Parcel />} />
           <Route path="/safety" element={<Safety />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/profile" element={<ProtectedRoute role="user"><Profile /></ProtectedRoute>} />
@@ -211,14 +227,15 @@ function App() {
           <Route path="/ai-modules/:id" element={<AIModuleDetail />} />
 
           {/* Listings */}
-          <Route path="/products" element={<Listing title="All Products" />} />
           <Route path="/flash-sale" element={<Listing title="Flash Sales" filter="flash" />} />
           <Route path="/vendors" element={<Listing title="Our Vendors" />} />
-          <Route path="/shop/:id" element={<Listing title="Vendor Shop" />} />
+          <Route path="/shop/:id" element={<VendorShop />} />
+          <Route path="/recent" element={<RecentProducts />} />
           
           {/* Protected Routes */}
           <Route path="/admin" element={<ProtectedRoute role="admin"><AdminDashboard /></ProtectedRoute>} />
           <Route path="/vendor/dashboard" element={<ProtectedRoute role="vendor"><VendorDashboard /></ProtectedRoute>} />
+          <Route path="/driver/dashboard" element={<ProtectedRoute role="driver"><DriverDashboard /></ProtectedRoute>} />
         </Routes>
       </Layout>
     </Router>

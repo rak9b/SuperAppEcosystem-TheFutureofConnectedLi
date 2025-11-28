@@ -13,7 +13,7 @@ export function Navbar() {
   const [showSettings, setShowSettings] = useState(false);
   const location = useLocation();
 
-  const isImmersivePage = ['/ride', '/safety', '/pay', '/checkout'].includes(location.pathname);
+  const isImmersivePage = ['/ride', '/safety', '/pay', '/checkout', '/market'].includes(location.pathname);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -58,7 +58,7 @@ export function Navbar() {
           {/* Desktop Nav Links */}
           <div className="hidden lg:flex items-center gap-1 bg-slate-100 dark:bg-white/5 rounded-full p-1 border border-slate-200 dark:border-white/10 mx-4">
             {[
-              { name: 'Shop', path: '/' },
+              { name: 'Shop', path: '/market' },
               { name: 'Ride', path: '/ride' },
               { name: 'Food', path: '/food' },
               { name: 'Pay', path: '/pay' },
@@ -182,7 +182,7 @@ export function Navbar() {
                 {['Shop', 'Ride', 'Food', 'Pay', 'Safety', 'Support'].map(item => (
                   <Link 
                     key={item} 
-                    to={item === 'Shop' ? '/' : `/${item.toLowerCase()}`} 
+                    to={item === 'Shop' ? '/market' : `/${item.toLowerCase()}`} 
                     className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 text-center font-medium dark:text-white"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >

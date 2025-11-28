@@ -10,6 +10,7 @@ export interface RideOption {
   eta: number; // minutes
   description: string;
   capacity?: string;
+  co2?: string; // Eco feature
 }
 
 export interface Restaurant {
@@ -50,38 +51,27 @@ export interface Transaction {
 }
 
 export const RIDE_OPTIONS: RideOption[] = [
-  // --- Pathao / Local Favorites ---
-  { id: 'pathao_bike', name: 'Moto Ride', category: 'Ride', subCategory: 'Bike', image: 'Bike', priceMultiplier: 1.0, eta: 3, description: 'Fastest way to beat traffic', capacity: '1 Person' },
-  { id: 'pathao_auto', name: 'Auto Rickshaw', category: 'Ride', subCategory: 'Auto', image: 'CarFront', priceMultiplier: 1.3, eta: 5, description: 'Affordable 3-wheeler ride', capacity: '3 People' },
+  // --- Two Wheelers ---
+  { id: 'moto_bike', name: 'Moto', category: 'Ride', subCategory: 'Bike', image: 'Bike', priceMultiplier: 1.0, eta: 3, description: 'Fastest in traffic', capacity: '1', co2: '12g' },
+  { id: 'scooter_electric', name: 'E-Scooter', category: 'Ride', subCategory: 'Bike', image: 'Zap', priceMultiplier: 0.9, eta: 5, description: 'Green & cheap', capacity: '1', co2: '0g' },
+
+  // --- Three Wheelers ---
+  { id: 'auto_cng', name: 'CNG / Auto', category: 'Ride', subCategory: 'Auto', image: 'CarFront', priceMultiplier: 1.3, eta: 5, description: 'Reliable 3-wheeler', capacity: '3', co2: '45g' },
   
-  // --- Uber Economy ---
-  { id: 'uber_x', name: 'UberX', category: 'Ride', subCategory: 'Economy', image: 'Car', priceMultiplier: 1.8, eta: 6, description: 'Affordable everyday rides', capacity: '4 People' },
-  { id: 'uber_pool', name: 'Uber Pool', category: 'Ride', subCategory: 'Shared', image: 'Users', priceMultiplier: 1.4, eta: 10, description: 'Shared rides, split cost', capacity: '1 Person' },
+  // --- Economy Cars ---
+  { id: 'car_mini', name: 'Mini', category: 'Ride', subCategory: 'Economy', image: 'Car', priceMultiplier: 1.6, eta: 8, description: 'Compact hatchback', capacity: '4', co2: '90g' },
+  { id: 'car_ac', name: 'Sedan', category: 'Ride', subCategory: 'Economy', image: 'Car', priceMultiplier: 1.9, eta: 7, description: 'Comfortable sedan', capacity: '4', co2: '110g' },
   
-  // --- Uber Premium ---
-  { id: 'uber_comfort', name: 'Uber Comfort', category: 'Ride', subCategory: 'Premium', image: 'Armchair', priceMultiplier: 2.2, eta: 8, description: 'Newer cars with extra legroom', capacity: '4 People' },
-  { id: 'uber_xl', name: 'UberXL', category: 'Ride', subCategory: 'Special', image: 'Bus', priceMultiplier: 2.8, eta: 12, description: 'Larger vehicles for groups', capacity: '6 People' },
-  { id: 'uber_black', name: 'Uber Black', category: 'Ride', subCategory: 'Premium', image: 'Crown', priceMultiplier: 3.5, eta: 15, description: 'Premium luxury rides', capacity: '4 People' },
+  // --- Shared ---
+  { id: 'car_pool', name: 'Pool', category: 'Ride', subCategory: 'Shared', image: 'Users', priceMultiplier: 1.4, eta: 12, description: 'Share & save 30%', capacity: '1', co2: '40g' },
+
+  // --- Premium ---
+  { id: 'car_prime', name: 'Prime SUV', category: 'Ride', subCategory: 'Premium', image: 'Shield', priceMultiplier: 2.5, eta: 10, description: 'Spacious SUV with WiFi', capacity: '6', co2: '150g' },
+  { id: 'car_lux', name: 'Lux', category: 'Ride', subCategory: 'Premium', image: 'Crown', priceMultiplier: 3.5, eta: 15, description: 'Mercedes / BMW', capacity: '4', co2: '140g' },
   
-  // --- Special Access ---
-  { id: 'uber_wav', name: 'Uber WAV', category: 'Ride', subCategory: 'Special', image: 'Accessibility', priceMultiplier: 1.8, eta: 20, description: 'Wheelchair accessible vehicles', capacity: '4 People' },
-
-  // --- Delivery Services (Connect/Courier) ---
-  { id: 'uber_connect', name: 'Uber Connect', category: 'Parcel', image: 'Package', priceMultiplier: 1.2, eta: 10, description: 'Send packages to friends', capacity: 'Small Box' },
-  { id: 'pathao_courier', name: 'Pathao Courier', category: 'Parcel', image: 'Truck', priceMultiplier: 1.5, eta: 45, description: 'Standard parcel delivery', capacity: 'Max 20kg' },
-  { id: 'pathao_express', name: 'Pathao Express', category: 'Parcel', image: 'Zap', priceMultiplier: 2.0, eta: 30, description: 'Quick city delivery', capacity: 'Documents' },
-
-  // --- Freight & Health ---
-  { id: 'uber_freight', name: 'Uber Freight', category: 'Freight', image: 'Container', priceMultiplier: 10.0, eta: 120, description: 'Truck drivers & shipping', capacity: 'Full Truck' },
-  { id: 'uber_health', name: 'Uber Health', category: 'Health', image: 'Stethoscope', priceMultiplier: 2.0, eta: 15, description: 'Medical transport services', capacity: 'Patient+1' },
-
-  // --- Rentals ---
-  { id: 'rent_hourly', name: 'Hourly Rental', category: 'Rentals', subCategory: 'Hourly', image: 'Clock', priceMultiplier: 5.0, eta: 15, description: 'Keep the car for hours', capacity: '4 People' },
-  { id: 'rent_luxury', name: 'Supercar Rental', category: 'Rentals', subCategory: 'Luxury', image: 'Gem', priceMultiplier: 15.0, eta: 60, description: 'Drive a Porsche for a day', capacity: '2 People' },
-
-  // --- Travel ---
-  { id: 'travel_intercity', name: 'Intercity Bus', category: 'Travel', image: 'BusFront', priceMultiplier: 4.0, eta: 0, description: 'Comfortable AC buses', capacity: 'Seat' },
-  { id: 'travel_airport', name: 'Airport Shuttle', category: 'Travel', image: 'Plane', priceMultiplier: 3.5, eta: 20, description: 'Direct to terminal', capacity: 'Luggage+' },
+  // --- Delivery Services ---
+  { id: 'del_bike', name: 'Bike Courier', category: 'Parcel', image: 'Package', priceMultiplier: 1.2, eta: 15, description: 'Small documents/packets', capacity: '5kg' },
+  { id: 'del_truck', name: 'Mini Truck', category: 'Parcel', image: 'Truck', priceMultiplier: 3.0, eta: 45, description: 'Furniture & moving', capacity: '500kg' },
 ];
 
 export const RESTAURANTS: Restaurant[] = [
